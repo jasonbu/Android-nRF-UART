@@ -27,6 +27,7 @@ package com.hetangsmart.testv1;
 
 
 import java.io.UnsupportedEncodingException;
+import java.math.BigInteger;
 import java.text.DateFormat;
 import java.util.Date;
 
@@ -58,6 +59,9 @@ import android.widget.ListView;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
+
+//import javax.xml.bind.annotation.adapters.HexBinaryAdapter;
+
 
 public class MainActivity extends Activity implements RadioGroup.OnCheckedChangeListener {
     private static final int REQUEST_SELECT_DEVICE = 1;
@@ -108,9 +112,8 @@ public class MainActivity extends Activity implements RadioGroup.OnCheckedChange
                     Log.i(TAG, "onClick - BT not enabled yet");
                     Intent enableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
                     startActivityForResult(enableIntent, REQUEST_ENABLE_BT);
-                }
-                else {
-                    if (btnConnectDisconnect.getText().equals("Connect")){
+                } else {
+                    if (btnConnectDisconnect.getText().equals("Connect")) {
 
                         //Connect button pressed, open DeviceListActivity class, with popup windows that scan for devices
 
@@ -118,8 +121,7 @@ public class MainActivity extends Activity implements RadioGroup.OnCheckedChange
                         startActivityForResult(newIntent, REQUEST_SELECT_DEVICE);
                     } else {
                         //Disconnect button pressed
-                        if (mDevice!=null)
-                        {
+                        if (mDevice != null) {
                             mService_FFC0.disconnect();
 
                         }
@@ -129,24 +131,21 @@ public class MainActivity extends Activity implements RadioGroup.OnCheckedChange
         });
         // Handle Send button
         btnSend.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View v) {
                 EditText editText = (EditText) findViewById(R.id.sendText);
                 String message = editText.getText().toString();
-                byte[] value;
-                try {
-                    //send data to service
-                    value = message.getBytes("UTF-8");
-                    mService_FFC0.writeRXCharacteristic(value);
-                    //Update the log with time stamp
-                    String currentDateTimeString = DateFormat.getTimeInstance().format(new Date());
-                    listAdapter.add("["+currentDateTimeString+"] TX: "+ message);
-                    messageListView.smoothScrollToPosition(listAdapter.getCount() - 1);
-                    edtMessage.setText("");
-                } catch (UnsupportedEncodingException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                }
+                byte[] value = new BigInteger(message,16).toByteArray();
+
+                Log.d(TAG, "ready_to_send: " + message);
+
+                mService_FFC0.writeRXCharacteristic(value);
+                //Update the log with time stamp
+                String currentDateTimeString = DateFormat.getTimeInstance().format(new Date());
+                listAdapter.add("["+currentDateTimeString+"] TX: "+ message);
+                messageListView.smoothScrollToPosition(listAdapter.getCount() - 1);
+                edtMessage.setText("");
 
             }
         });
@@ -236,7 +235,14 @@ public class MainActivity extends Activity implements RadioGroup.OnCheckedChange
                 runOnUiThread(new Runnable() {
                     public void run() {
                         try {
-                            String text = new String(txValue, "UTF-8");
+                            //String text = new String(txValue, "UTF-8");
+
+                            StringBuilder sb = new StringBuilder(txValue.length * 2);
+                            for (int i=0;i<txValue.length;i++){
+                                sb.append(String.format("%02X",txValue[i]));
+                            }
+                            String text = sb.toString();
+                            Log.d(TAG,"len:"+txValue.length);
                             String currentDateTimeString = DateFormat.getTimeInstance().format(new Date());
                             listAdapter.add("["+currentDateTimeString+"] RX: "+text);
                             messageListView.smoothScrollToPosition(listAdapter.getCount() - 1);

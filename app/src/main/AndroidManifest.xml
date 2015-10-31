@@ -57,7 +57,7 @@
             android:theme="@android:style/Theme.Dialog" />
 
         <service
-            android:name=".HetangsmartFFC0"
+            android:name=".HetangsmartFFC0Service"
             android:enabled="true" />
 
     </application>

@@ -20,8 +20,8 @@ import android.util.Log;
 import java.util.List;
 import java.util.UUID;
 
-public class HetangsmartFFC0 extends Service {
-    private final static String TAG = HetangsmartFFC0.class.getSimpleName();
+public class HetangsmartFFC0Service extends Service {
+    private final static String TAG = HetangsmartFFC0Service.class.getSimpleName();
 
     private BluetoothManager mBluetoothManager;
     private BluetoothAdapter mBluetoothAdapter;
@@ -128,8 +128,8 @@ public class HetangsmartFFC0 extends Service {
     }
 
     public class LocalBinder extends Binder {
-        HetangsmartFFC0 getService() {
-            return HetangsmartFFC0.this;
+        HetangsmartFFC0Service getService() {
+            return HetangsmartFFC0Service.this;
         }
     }
 

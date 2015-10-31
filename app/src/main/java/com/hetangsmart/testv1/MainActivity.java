@@ -31,13 +31,10 @@ import java.text.DateFormat;
 import java.util.Date;
 
 
-import com.hetangsmart.testv1.HetangsmartFFC0;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
-import android.bluetooth.BluetoothManager;
 
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
@@ -47,21 +44,16 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.content.res.Configuration;
-import android.media.Ringtone;
-import android.media.RingtoneManager;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RadioGroup;
 import android.widget.TextView;
@@ -80,7 +72,7 @@ public class MainActivity extends Activity implements RadioGroup.OnCheckedChange
     RadioGroup mRg;
     private int mState = UART_PROFILE_DISCONNECTED;
     //private UartService mService = null;
-    private HetangsmartFFC0 mService_FFC0 = null;
+    private HetangsmartFFC0Service mService_FFC0 = null;
     private BluetoothDevice mDevice = null;
     private BluetoothAdapter mBtAdapter = null;
     private ListView messageListView;
@@ -166,7 +158,7 @@ public class MainActivity extends Activity implements RadioGroup.OnCheckedChange
     //UART service connected/disconnected
     private ServiceConnection mService_FFC0Connection = new ServiceConnection() {
         public void onServiceConnected(ComponentName className, IBinder rawBinder) {
-            mService_FFC0 = ((HetangsmartFFC0.LocalBinder) rawBinder).getService();
+            mService_FFC0 = ((HetangsmartFFC0Service.LocalBinder) rawBinder).getService();
             Log.d(TAG, "onServiceConnected mService_FFC0= " + mService_FFC0);
             if (!mService_FFC0.initialize()) {
                 Log.e(TAG, "Unable to initialize Bluetooth");
@@ -197,7 +189,7 @@ public class MainActivity extends Activity implements RadioGroup.OnCheckedChange
 
             final Intent mIntent = intent;
             //*********************//
-            if (action.equals(HetangsmartFFC0.ACTION_GATT_CONNECTED)) {
+            if (action.equals(HetangsmartFFC0Service.ACTION_GATT_CONNECTED)) {
                 runOnUiThread(new Runnable() {
                     public void run() {
                         String currentDateTimeString = DateFormat.getTimeInstance().format(new Date());
@@ -214,7 +206,7 @@ public class MainActivity extends Activity implements RadioGroup.OnCheckedChange
             }
 
             //*********************//
-            if (action.equals(HetangsmartFFC0.ACTION_GATT_DISCONNECTED)) {
+            if (action.equals(HetangsmartFFC0Service.ACTION_GATT_DISCONNECTED)) {
                 runOnUiThread(new Runnable() {
                     public void run() {
                         String currentDateTimeString = DateFormat.getTimeInstance().format(new Date());
@@ -234,13 +226,13 @@ public class MainActivity extends Activity implements RadioGroup.OnCheckedChange
 
 
             //*********************//
-            if (action.equals(HetangsmartFFC0.ACTION_GATT_SERVICES_DISCOVERED)) {
+            if (action.equals(HetangsmartFFC0Service.ACTION_GATT_SERVICES_DISCOVERED)) {
                 mService_FFC0.enableTXNotification();
             }
             //*********************//
-            if (action.equals(HetangsmartFFC0.ACTION_DATA_AVAILABLE)) {
+            if (action.equals(HetangsmartFFC0Service.ACTION_DATA_AVAILABLE)) {
 
-                final byte[] txValue = intent.getByteArrayExtra(HetangsmartFFC0.EXTRA_DATA);
+                final byte[] txValue = intent.getByteArrayExtra(HetangsmartFFC0Service.EXTRA_DATA);
                 runOnUiThread(new Runnable() {
                     public void run() {
                         try {
@@ -256,7 +248,7 @@ public class MainActivity extends Activity implements RadioGroup.OnCheckedChange
                 });
             }
             //*********************//
-            if (action.equals(HetangsmartFFC0.DEVICE_DOES_NOT_SUPPORT_UART)){
+            if (action.equals(HetangsmartFFC0Service.DEVICE_DOES_NOT_SUPPORT_UART)){
                 showMessage("Device doesn't support UART. Disconnecting");
                 mService_FFC0.disconnect();
             }
@@ -266,18 +258,18 @@ public class MainActivity extends Activity implements RadioGroup.OnCheckedChange
     };
 
     private void service_init() {
-        Intent bindIntent = new Intent(this, HetangsmartFFC0.class);
+        Intent bindIntent = new Intent(this, HetangsmartFFC0Service.class);
         bindService(bindIntent, mService_FFC0Connection, Context.BIND_AUTO_CREATE);
 
         LocalBroadcastManager.getInstance(this).registerReceiver(UARTStatusChangeReceiver, makeGattUpdateIntentFilter());
     }
     private static IntentFilter makeGattUpdateIntentFilter() {
         final IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(HetangsmartFFC0.ACTION_GATT_CONNECTED);
-        intentFilter.addAction(HetangsmartFFC0.ACTION_GATT_DISCONNECTED);
-        intentFilter.addAction(HetangsmartFFC0.ACTION_GATT_SERVICES_DISCOVERED);
-        intentFilter.addAction(HetangsmartFFC0.ACTION_DATA_AVAILABLE);
-        intentFilter.addAction(HetangsmartFFC0.DEVICE_DOES_NOT_SUPPORT_UART);
+        intentFilter.addAction(HetangsmartFFC0Service.ACTION_GATT_CONNECTED);
+        intentFilter.addAction(HetangsmartFFC0Service.ACTION_GATT_DISCONNECTED);
+        intentFilter.addAction(HetangsmartFFC0Service.ACTION_GATT_SERVICES_DISCOVERED);
+        intentFilter.addAction(HetangsmartFFC0Service.ACTION_DATA_AVAILABLE);
+        intentFilter.addAction(HetangsmartFFC0Service.DEVICE_DOES_NOT_SUPPORT_UART);
         return intentFilter;
     }
     @Override

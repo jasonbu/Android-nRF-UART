@@ -236,12 +236,9 @@ public class MainActivity extends Activity implements RadioGroup.OnCheckedChange
                     public void run() {
                         try {
                             //String text = new String(txValue, "UTF-8");
+                            BigInteger bi = new BigInteger(txValue);
+                            String text = bi.toString(16);
 
-                            StringBuilder sb = new StringBuilder(txValue.length * 2);
-                            for (int i=0;i<txValue.length;i++){
-                                sb.append(String.format("%02X",txValue[i]));
-                            }
-                            String text = sb.toString();
                             Log.d(TAG,"len:"+txValue.length);
                             String currentDateTimeString = DateFormat.getTimeInstance().format(new Date());
                             listAdapter.add("["+currentDateTimeString+"] RX: "+text);

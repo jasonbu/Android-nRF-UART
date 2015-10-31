@@ -21,7 +21,7 @@
   ~ USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.nordicsemi.nrfUARTv2"
+    package="com.hetangsmart.testv1"
     android:versionCode="43"
     android:versionName="2.0" >
 
@@ -57,13 +57,9 @@
             android:theme="@android:style/Theme.Dialog" />
 
         <service
-            android:name=".UartService"
+            android:name=".HetangsmartFFC0"
             android:enabled="true" />
-        <service
-            android:name="com.hetangsmart.testv1.HetangsmartFFC0"
-            android:enabled="true"
-            android:exported="true" >
-        </service>
+
     </application>
 
 </manifest>

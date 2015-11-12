@@ -83,6 +83,9 @@ public class MainActivity extends Activity implements RadioGroup.OnCheckedChange
     private ArrayAdapter<String> listAdapter;
     private Button btnConnectDisconnect,btnSend;
     private EditText edtMessage;
+
+    public DBManager dm;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -278,6 +281,9 @@ public class MainActivity extends Activity implements RadioGroup.OnCheckedChange
     @Override
     public void onStart() {
         super.onStart();
+
+        dm = new DBManager(this);
+
     }
 
     @Override

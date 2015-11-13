@@ -122,10 +122,10 @@ public class ble_upload_type {
         y1[1] = data[6];
         z1[0] = data[9];
         z1[1] = data[8];
-        stamp1[0] = data[13];
-        stamp1[1] = data[12];
-        stamp1[2] = data[11];
-        stamp1[3] = data[10];
+        stamp2[0] = data[13];
+        stamp2[1] = data[12];
+        stamp2[2] = data[11];
+        stamp2[3] = data[10];
         x2[0] = data[15];
         x2[1] = data[14];
         y2[0] = data[17];

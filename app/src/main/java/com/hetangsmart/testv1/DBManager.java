@@ -4,15 +4,22 @@ package com.hetangsmart.testv1;
  * Created by jasonbu on 2015/11/13.
  */
 
+import java.io.File;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 public class DBManager {
+    private static final String TAG = "dbManager";
+
     private DBHelper helper;
     private SQLiteDatabase db;
     private static final String dbDirName = "tsSQLITE";     //数据库存放的文件夹
@@ -60,5 +67,30 @@ public class DBManager {
         }finally {
             db.endTransaction();// 结束事务
         }
+    }
+
+    public void modify()
+    {
+        SimpleDateFormat formatter = new SimpleDateFormat ("yyyy-MM-dd HH:mm:ss");
+        Date curDate = new Date(System.currentTimeMillis());//获取当前时间
+        String currentDateTimeString = formatter.format(curDate);
+
+        String TargetFileName = currentDateTimeString+".db";
+        String dbDir=android.os.Environment.getExternalStorageDirectory().getAbsolutePath();
+        dbDir += "/" + dbDirName;//数据库所在目录
+        String dbPath = dbDir+"/"+dbDFileName;//数据库路径
+        String TargetPath = dbDir+"/"+TargetFileName;  //重命名之后的路径
+
+        try {
+            db.close();
+            File file = new File(dbPath);
+            file.renameTo(new File(TargetPath));
+            db = helper.getWritableDatabase();
+
+        } catch (Exception e) {
+            Log.e(TAG, e.toString());
+        }
+
+
     }
 }

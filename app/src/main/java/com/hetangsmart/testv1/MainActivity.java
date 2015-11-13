@@ -148,6 +148,7 @@ public class MainActivity extends Activity implements RadioGroup.OnCheckedChange
                 }else if(uploader.state_upload == ble_upload_type.upload_state_enum_t.waiting_ble){
                     mService_FFC0.writeRXCharacteristic(uploader.CommandDataForStop());
                     NextEnable = true;
+                    dm.modify();
                 }else{
                     NextEnable = true;
                 }

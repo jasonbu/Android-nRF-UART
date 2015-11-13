@@ -9,16 +9,7 @@
     <option name="TOOL_WINDOW_CONFIGURED_FILTER" value="Show only selected application" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="c1630715-fdf5-469f-90a4-60088e272423" name="Default" comment="edit and delete uart service_file">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gradle/2.4/taskArtifacts/cache.properties.lock" afterPath="$PROJECT_DIR$/.gradle/2.4/taskArtifacts/cache.properties.lock" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gradle/2.4/taskArtifacts/fileHashes.bin" afterPath="$PROJECT_DIR$/.gradle/2.4/taskArtifacts/fileHashes.bin" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gradle/2.4/taskArtifacts/fileSnapshots.bin" afterPath="$PROJECT_DIR$/.gradle/2.4/taskArtifacts/fileSnapshots.bin" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gradle/2.4/taskArtifacts/taskArtifacts.bin" afterPath="$PROJECT_DIR$/.gradle/2.4/taskArtifacts/taskArtifacts.bin" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/hetangsmart/testv1/DBManager.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/hetangsmart/testv1/DBManager.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/hetangsmart/testv1/MainActivity.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/hetangsmart/testv1/MainActivity.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/hetangsmart/testv1/ble_upload_type.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/hetangsmart/testv1/ble_upload_type.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-    </list>
+    <list default="true" id="c1630715-fdf5-469f-90a4-60088e272423" name="Default" comment="edit and delete uart service_file" />
     <ignored path="Android-nRF-UART.iws" />
     <ignored path=".idea/workspace.xml" />
     <ignored path="$PROJECT_DIR$/build/classes/" />
@@ -73,8 +64,8 @@
       <file leaf-file-name="ble_upload_type.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/com/hetangsmart/testv1/ble_upload_type.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.85785955">
-              <caret line="126" column="29" selection-start-line="126" selection-start-column="29" selection-end-line="126" selection-end-column="29" />
+            <state vertical-scroll-proportion="1.1438127">
+              <caret line="114" column="28" selection-start-line="114" selection-start-column="8" selection-end-line="114" selection-end-column="28" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -1939,7 +1930,7 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="1358" y="-309" width="1936" height="1096" extended-state="6" />
-    <editor active="true" />
+    <editor active="false" />
     <layout>
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32942432" sideWeight="0.4978678" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3336887" sideWeight="0.37473348" order="7" side_tool="false" content_ui="tabs" />
@@ -2455,8 +2446,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/hetangsmart/testv1/ble_upload_type.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.85785955">
-          <caret line="126" column="29" selection-start-line="126" selection-start-column="29" selection-end-line="126" selection-end-column="29" />
+        <state vertical-scroll-proportion="1.1438127">
+          <caret line="114" column="28" selection-start-line="114" selection-start-column="8" selection-end-line="114" selection-end-column="28" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>

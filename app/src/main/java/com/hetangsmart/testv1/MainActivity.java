@@ -67,7 +67,7 @@ public class MainActivity extends Activity implements RadioGroup.OnCheckedChange
     private static final int REQUEST_SELECT_DEVICE = 1;
     private static final int REQUEST_ENABLE_BT = 2;
     private static final int UART_PROFILE_READY = 10;
-    public static final String TAG = "nRFUART";
+    public static final String TAG = "MainActivity";
     private static final int UART_PROFILE_CONNECTED = 20;
     private static final int UART_PROFILE_DISCONNECTED = 21;
     private static final int STATE_OFF = 10;
@@ -85,6 +85,7 @@ public class MainActivity extends Activity implements RadioGroup.OnCheckedChange
     private EditText edtMessage;
 
     public DBManager dm;
+    public ble_upload_type uploader;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -106,6 +107,8 @@ public class MainActivity extends Activity implements RadioGroup.OnCheckedChange
         service_init();
 
 
+        dm = new DBManager(this);
+        uploader = new ble_upload_type();
 
         // Handle Disconnect & Connect button
         btnConnectDisconnect.setOnClickListener(new View.OnClickListener() {
@@ -188,6 +191,8 @@ public class MainActivity extends Activity implements RadioGroup.OnCheckedChange
 
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
+
+            uploader.on_recieve_evt_hook(intent);
 
             final Intent mIntent = intent;
             //*********************//
@@ -281,9 +286,6 @@ public class MainActivity extends Activity implements RadioGroup.OnCheckedChange
     @Override
     public void onStart() {
         super.onStart();
-
-        dm = new DBManager(this);
-
     }
 
     @Override

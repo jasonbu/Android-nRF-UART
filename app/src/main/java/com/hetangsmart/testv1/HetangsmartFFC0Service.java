@@ -34,17 +34,17 @@ public class HetangsmartFFC0Service extends Service {
     private static final int STATE_CONNECTED = 2;
 
     public final static String ACTION_GATT_CONNECTED =
-            "com.hetangsmart.test.ACTION_GATT_CONNECTED";
+            "com.hetangsmart.test.FFC0.ACTION_GATT_CONNECTED";
     public final static String ACTION_GATT_DISCONNECTED =
-            "com.hetangsmart.test.ACTION_GATT_DISCONNECTED";
+            "com.hetangsmart.test.FFC0.ACTION_GATT_DISCONNECTED";
     public final static String ACTION_GATT_SERVICES_DISCOVERED =
-            "com.hetangsmart.test.ACTION_GATT_SERVICES_DISCOVERED";
+            "com.hetangsmart.test.FFC0.ACTION_GATT_SERVICES_DISCOVERED";
     public final static String ACTION_DATA_AVAILABLE =
-            "com.hetangsmart.test.ACTION_DATA_AVAILABLE";
+            "com.hetangsmart.test.FFC0.ACTION_DATA_AVAILABLE";
     public final static String EXTRA_DATA =
-            "com.hetangsmart.test.EXTRA_DATA";
+            "com.hetangsmart.test.FFC0.EXTRA_DATA";
     public final static String DEVICE_DOES_NOT_SUPPORT_UART =
-            "com.hetangsmart.test.DEVICE_DOES_NOT_SUPPORT_UART";
+            "com.hetangsmart.test.FFC0.DEVICE_DOES_NOT_SUPPORT_UART";
 
     //public static final UUID UUID16_SERVICE_UUID = UUID.fromString("F000XXXX-0451-4000-B000-000000000000");
     public static final UUID TX_POWER_UUID = UUID.fromString("00001804-0000-1000-8000-00805f9b34fb");

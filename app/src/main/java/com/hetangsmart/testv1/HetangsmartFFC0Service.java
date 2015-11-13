@@ -52,9 +52,9 @@ public class HetangsmartFFC0Service extends Service {
     public static final UUID CCCD = UUID.fromString("00002902-0000-1000-8000-00805f9b34fb");
     public static final UUID FIRMWARE_REVISON_UUID = UUID.fromString("00002a26-0000-1000-8000-00805f9b34fb");
     public static final UUID DIS_UUID = UUID.fromString("0000180a-0000-1000-8000-00805f9b34fb");
-    public static final UUID RX_SERVICE_UUID = UUID.fromString("0000FFC0-0000-1000-8000-00805f9b34fb");
-    public static final UUID RX_CHAR_UUID = UUID.fromString("0000FFC1-0000-1000-8000-00805f9b34fb");
-    public static final UUID TX_CHAR_UUID = UUID.fromString("0000FFC2-0000-1000-8000-00805f9b34fb");
+    public static final UUID RX_SERVICE_UUID = UUID.fromString("0000FFB0-0000-1000-8000-00805f9b34fb");
+    public static final UUID RX_CHAR_UUID = UUID.fromString("0000FFB1-0000-1000-8000-00805f9b34fb");
+    public static final UUID TX_CHAR_UUID = UUID.fromString("0000FFB2-0000-1000-8000-00805f9b34fb");
 
 
     // Implements callback methods for GATT events that the app cares about.  For example,

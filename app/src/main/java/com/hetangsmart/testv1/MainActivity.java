@@ -108,7 +108,7 @@ public class MainActivity extends Activity implements RadioGroup.OnCheckedChange
 
 
         dm = new DBManager(this);
-        uploader = new ble_upload_type();
+        uploader = new ble_upload_type(dm);
 
         // Handle Disconnect & Connect button
         btnConnectDisconnect.setOnClickListener(new View.OnClickListener() {
@@ -140,19 +140,27 @@ public class MainActivity extends Activity implements RadioGroup.OnCheckedChange
 
             @Override
             public void onClick(View v) {
-                EditText editText = (EditText) findViewById(R.id.sendText);
-                String message = editText.getText().toString();
-                byte[] value = new BigInteger(message,16).toByteArray();
+                final Boolean NextEnable;
 
-                Log.d(TAG, "ready_to_send: " + message);
+                if(uploader.state_upload == ble_upload_type.upload_state_enum_t.discover_finished){
+                    mService_FFC0.writeRXCharacteristic(uploader.CommandDataForStart());
+                    NextEnable = false;
+                }else if(uploader.state_upload == ble_upload_type.upload_state_enum_t.waiting_ble){
+                    mService_FFC0.writeRXCharacteristic(uploader.CommandDataForStop());
+                    NextEnable = true;
+                }else{
+                    NextEnable = true;
+                }
 
-                mService_FFC0.writeRXCharacteristic(value);
-                //Update the log with time stamp
-                String currentDateTimeString = DateFormat.getTimeInstance().format(new Date());
-                listAdapter.add("["+currentDateTimeString+"] TX: "+ message);
-                messageListView.smoothScrollToPosition(listAdapter.getCount() - 1);
-                edtMessage.setText("");
-
+                runOnUiThread(new Runnable() {
+                    public void run () {
+                        if (NextEnable) {
+                            btnSend.setText("Enable");
+                        } else {
+                            btnSend.setText("Disable");
+                        }
+                    }
+                });
             }
         });
 

@@ -52,9 +52,9 @@ public class HetangsmartFFC0Service extends Service {
     public static final UUID CCCD = UUID.fromString("00002902-0000-1000-8000-00805f9b34fb");
     public static final UUID FIRMWARE_REVISON_UUID = UUID.fromString("00002a26-0000-1000-8000-00805f9b34fb");
     public static final UUID DIS_UUID = UUID.fromString("0000180a-0000-1000-8000-00805f9b34fb");
-    public static final UUID RX_SERVICE_UUID = UUID.fromString("0000FFC0-0000-1000-8000-00805f9b34fb");
-    public static final UUID RX_CHAR_UUID = UUID.fromString("0000FFC1-0000-1000-8000-00805f9b34fb");
-    public static final UUID TX_CHAR_UUID = UUID.fromString("0000FFC2-0000-1000-8000-00805f9b34fb");
+    public static final UUID RX_SERVICE_UUID = UUID.fromString("68660001-7472-616e-736d-697474696f6e");
+    public static final UUID RX_CHAR_UUID = UUID.fromString("68660003-7472-616e-736d-697474696f71");
+    public static final UUID TX_CHAR_UUID = UUID.fromString("68660004-7472-616e-736d-697474696f72");
 
 
     // Implements callback methods for GATT events that the app cares about.  For example,
@@ -266,12 +266,6 @@ public class HetangsmartFFC0Service extends Service {
      *
 
      */
-
-    /**
-     * Enable Notification on TX characteristic
-     *
-     * @return
-     */
     public void enableTXNotification()
     {
     	/*
@@ -304,7 +298,7 @@ public class HetangsmartFFC0Service extends Service {
     public void writeRXCharacteristic(byte[] value)
     {
         BluetoothGattService RxService = mBluetoothGatt.getService(RX_SERVICE_UUID);
-        showMessage("mBluetoothGatt null"+ mBluetoothGatt);
+        //showMessage("mBluetoothGatt null"+ mBluetoothGatt);
         if (RxService == null) {
             showMessage("Rx service not found!");
             broadcastUpdate(DEVICE_DOES_NOT_SUPPORT_UART);
@@ -317,9 +311,34 @@ public class HetangsmartFFC0Service extends Service {
             return;
         }
         RxChar.setValue(value);
+
         boolean status = mBluetoothGatt.writeCharacteristic(RxChar);
 
         Log.d(TAG, "write TXchar - status=" + status);
+    }
+
+
+    public boolean writeRXCharacteristic_withack(byte[] value)
+    {
+        BluetoothGattService RxService = mBluetoothGatt.getService(RX_SERVICE_UUID);
+        //showMessage("mBluetoothGatt null"+ mBluetoothGatt);
+        if (RxService == null) {
+            showMessage("Rx service not found!");
+            broadcastUpdate(DEVICE_DOES_NOT_SUPPORT_UART);
+            return false;
+        }
+        BluetoothGattCharacteristic RxChar = RxService.getCharacteristic(RX_CHAR_UUID);
+        if (RxChar == null) {
+            showMessage("Rx charateristic not found!");
+            broadcastUpdate(DEVICE_DOES_NOT_SUPPORT_UART);
+            return false;
+        }
+        RxChar.setValue(value);
+
+        boolean status = mBluetoothGatt.writeCharacteristic(RxChar);
+
+        Log.d(TAG, "write TXchar - status=" + status);
+        return status;
     }
 
     private void showMessage(String msg) {

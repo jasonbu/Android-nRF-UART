@@ -135,8 +135,26 @@ public class MainActivity extends Activity implements RadioGroup.OnCheckedChange
             @Override
             public void onClick(View v) {
                 EditText editText = (EditText) findViewById(R.id.sendText);
-                String message = editText.getText().toString();
-                byte[] value = new BigInteger(message,16).toByteArray();
+                //String message = editText.getText().toString();
+                //byte[] value = new BigInteger(message,16).toByteArray();
+                String message = "00000000001111111111";
+
+                byte[] value = message.getBytes();
+
+                for(int i =0;i<10;i++){
+                    for(byte b='0';b<='9';b++) {
+                        value[0] = b;
+                        while(!mService_FFC0.writeRXCharacteristic_withack(value)){
+                            try {
+                                Thread.sleep(20);
+                            } catch (Exception e) {
+                                e.getLocalizedMessage();
+                            }
+                        }
+                            // Do some stuff
+                    }
+                }
+
 
                 Log.d(TAG, "ready_to_send: " + message);
 

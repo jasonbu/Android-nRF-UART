@@ -41,6 +41,8 @@ public class HetangsmartFFC0Service extends Service {
             "com.hetangsmart.test.ACTION_GATT_SERVICES_DISCOVERED";
     public final static String ACTION_DATA_AVAILABLE =
             "com.hetangsmart.test.ACTION_DATA_AVAILABLE";
+//    public final static String CONTROL_POINT_ACK =
+//            "com.hetangsmart.test.ACTION_CONTROL_POINT_ACK";
     public final static String EXTRA_DATA =
             "com.hetangsmart.test.EXTRA_DATA";
     public final static String DEVICE_DOES_NOT_SUPPORT_UART =
@@ -52,9 +54,11 @@ public class HetangsmartFFC0Service extends Service {
     public static final UUID CCCD = UUID.fromString("00002902-0000-1000-8000-00805f9b34fb");
     public static final UUID FIRMWARE_REVISON_UUID = UUID.fromString("00002a26-0000-1000-8000-00805f9b34fb");
     public static final UUID DIS_UUID = UUID.fromString("0000180a-0000-1000-8000-00805f9b34fb");
-    public static final UUID RX_SERVICE_UUID = UUID.fromString("68660001-7472-616e-736d-697474696f6e");
-    public static final UUID RX_CHAR_UUID = UUID.fromString("68660003-7472-616e-736d-697474696f71");
-    public static final UUID TX_CHAR_UUID = UUID.fromString("68660004-7472-616e-736d-697474696f72");
+    public static final UUID RX_SERVICE_UUID = UUID.fromString("68666974-7472-616e-736d-697474696f6e");
+    public static final UUID CP_CHAR_UUID = UUID.fromString("68666974-7472-616e-736d-697474696f6f");
+    public static final UUID CN_CHAR_UUID = UUID.fromString("68666974-7472-616e-736d-697474696f70");
+    public static final UUID RX_CHAR_UUID = UUID.fromString("68666974-7472-616e-736d-697474696f71");
+    public static final UUID TX_CHAR_UUID = UUID.fromString("68666974-7472-616e-736d-697474696f72");
 
 
     // Implements callback methods for GATT events that the app cares about.  For example,
@@ -104,7 +108,13 @@ public class HetangsmartFFC0Service extends Service {
         @Override
         public void onCharacteristicChanged(BluetoothGatt gatt,
                                             BluetoothGattCharacteristic characteristic) {
+            //broadcastUpdate(CONTROL_POINT_ACK, characteristic);
             broadcastUpdate(ACTION_DATA_AVAILABLE, characteristic);
+//            if(characteristic.getUuid().toString().equals(TX_CHAR_UUID)) {
+//                broadcastUpdate(ACTION_DATA_AVAILABLE, characteristic);
+//            }else{
+//                broadcastUpdate(CONTROL_POINT_ACK, characteristic);
+//            }
         }
     };
 
@@ -118,7 +128,7 @@ public class HetangsmartFFC0Service extends Service {
         final Intent intent = new Intent(action);
 
         // This is handling for the notification on TX Character of NUS service
-        if (TX_CHAR_UUID.equals(characteristic.getUuid())) {
+        if (CN_CHAR_UUID.equals(characteristic.getUuid())) {
 
             // Log.d(TAG, String.format("Received TX: %d",characteristic.getValue() ));
             intent.putExtra(EXTRA_DATA, characteristic.getValue());
@@ -281,17 +291,37 @@ public class HetangsmartFFC0Service extends Service {
             broadcastUpdate(DEVICE_DOES_NOT_SUPPORT_UART);
             return;
         }
-        BluetoothGattCharacteristic TxChar = RxService.getCharacteristic(TX_CHAR_UUID);
-        if (TxChar == null) {
-            showMessage("Tx charateristic not found!");
+//        BluetoothGattCharacteristic TxChar = RxService.getCharacteristic(TX_CHAR_UUID);
+//        if (TxChar == null) {
+//            showMessage("Tx charateristic not found!");
+//            broadcastUpdate(DEVICE_DOES_NOT_SUPPORT_UART);
+//            return;
+//        }
+//        mBluetoothGatt.setCharacteristicNotification(TxChar, true);
+//
+//        BluetoothGattDescriptor descriptor = TxChar.getDescriptor(CCCD);
+//        descriptor.setValue(BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE);
+//        mBluetoothGatt.writeDescriptor(descriptor);
+//
+//        try {
+//            Thread.sleep(100);
+//        } catch (Exception e) {
+//            e.getLocalizedMessage();
+//        }
+
+        BluetoothGattCharacteristic CnChar = RxService.getCharacteristic(CN_CHAR_UUID);
+        if (CnChar == null) {
+            showMessage("cn charateristic not found!");
             broadcastUpdate(DEVICE_DOES_NOT_SUPPORT_UART);
             return;
         }
-        mBluetoothGatt.setCharacteristicNotification(TxChar,true);
+        mBluetoothGatt.setCharacteristicNotification(CnChar,true);
 
-        BluetoothGattDescriptor descriptor = TxChar.getDescriptor(CCCD);
-        descriptor.setValue(BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE);
-        mBluetoothGatt.writeDescriptor(descriptor);
+        BluetoothGattDescriptor descriptor1 = CnChar.getDescriptor(CCCD);
+        descriptor1.setValue(BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE);
+        mBluetoothGatt.writeDescriptor(descriptor1);
+
+        Log.d(TAG, "enabled");
 
     }
 
@@ -340,6 +370,30 @@ public class HetangsmartFFC0Service extends Service {
         Log.d(TAG, "write TXchar - status=" + status);
         return status;
     }
+
+    public void writeCommand(byte[] value)
+    {
+        BluetoothGattService RxService = mBluetoothGatt.getService(RX_SERVICE_UUID);
+        //showMessage("mBluetoothGatt null"+ mBluetoothGatt);
+        if (RxService == null) {
+            showMessage("Rx service not found!");
+            broadcastUpdate(DEVICE_DOES_NOT_SUPPORT_UART);
+            return;
+        }
+        BluetoothGattCharacteristic RxChar = RxService.getCharacteristic(CP_CHAR_UUID);
+        if (RxChar == null) {
+            showMessage("Rx charateristic not found!");
+            broadcastUpdate(DEVICE_DOES_NOT_SUPPORT_UART);
+            return;
+        }
+        RxChar.setValue(value);
+
+        boolean status = mBluetoothGatt.writeCharacteristic(RxChar);
+
+        Log.d(TAG, "write Command - status=" + status);
+        return;
+    }
+
 
     private void showMessage(String msg) {
         Log.e(TAG, msg);

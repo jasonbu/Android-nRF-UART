@@ -137,26 +137,32 @@ public class MainActivity extends Activity implements RadioGroup.OnCheckedChange
                 EditText editText = (EditText) findViewById(R.id.sendText);
                 //String message = editText.getText().toString();
                 //byte[] value = new BigInteger(message,16).toByteArray();
-                String message = "00000000001111111111";
+                String message = "00000000001111111110";
+
+
 
                 byte[] value = message.getBytes();
 
-                for(int i =0;i<10;i++){
-                    for(byte b='0';b<='9';b++) {
-                        value[0] = b;
-                        while(!mService_FFC0.writeRXCharacteristic_withack(value)){
-                            try {
-                                Thread.sleep(20);
-                            } catch (Exception e) {
-                                e.getLocalizedMessage();
-                            }
-                        }
-                            // Do some stuff
-                    }
-                }
+                value[0] = 0x41;
+                value[19] = 0;
+                mService_FFC0.writeCommand(value);
+                Log.d(TAG, "ready_to_send command ");
 
 
-                Log.d(TAG, "ready_to_send: " + message);
+//                for(int i =0;i<10;i++){
+//                    for(byte b='0';b<='9';b++) {
+//                        value[0] = b;
+//                        while(!mService_FFC0.writeRXCharacteristic_withack(value)){
+//                            try {
+//                                Thread.sleep(20);
+//                            } catch (Exception e) {
+//                                e.getLocalizedMessage();
+//                            }
+//                        }
+//                            // Do some stuff
+//                    }
+//                }
+
 
                 mService_FFC0.writeRXCharacteristic(value);
                 //Update the log with time stamp
@@ -214,8 +220,8 @@ public class MainActivity extends Activity implements RadioGroup.OnCheckedChange
                         btnConnectDisconnect.setText("Disconnect");
                         edtMessage.setEnabled(true);
                         btnSend.setEnabled(true);
-                        ((TextView) findViewById(R.id.deviceName)).setText(mDevice.getName()+ " - ready");
-                        listAdapter.add("["+currentDateTimeString+"] Connected to: "+ mDevice.getName());
+                        ((TextView) findViewById(R.id.deviceName)).setText(mDevice.getName() + " - ready");
+                        listAdapter.add("[" + currentDateTimeString + "] Connected to: " + mDevice.getName());
                         messageListView.smoothScrollToPosition(listAdapter.getCount() - 1);
                         mState = UART_PROFILE_CONNECTED;
                     }
@@ -248,26 +254,73 @@ public class MainActivity extends Activity implements RadioGroup.OnCheckedChange
             }
             //*********************//
             if (action.equals(HetangsmartFFC0Service.ACTION_DATA_AVAILABLE)) {
-
                 final byte[] txValue = intent.getByteArrayExtra(HetangsmartFFC0Service.EXTRA_DATA);
-                runOnUiThread(new Runnable() {
-                    public void run() {
-                        try {
-                            //String text = new String(txValue, "UTF-8");
-                            BigInteger bi = new BigInteger(txValue);
-                            String text = bi.toString(16);
+                Log.d(TAG,"len:"+txValue.length);
+                String currentDateTimeString = DateFormat.getTimeInstance().format(new Date());
+                listAdapter.add("["+currentDateTimeString+"] RX: "+txValue);
+                messageListView.smoothScrollToPosition(listAdapter.getCount() - 1);
+                String message = "01234567890123456789";
+                byte[] value = message.getBytes();
+                value[19] = 0;
+                if(txValue[0] == 0x12) {
+//                    runOnUiThread(new Runnable() {
+//                        public void run() {
 
-                            Log.d(TAG,"len:"+txValue.length);
-                            String currentDateTimeString = DateFormat.getTimeInstance().format(new Date());
-                            listAdapter.add("["+currentDateTimeString+"] RX: "+text);
-                            messageListView.smoothScrollToPosition(listAdapter.getCount() - 1);
 
-                        } catch (Exception e) {
-                            Log.e(TAG, e.toString());
-                        }
+                            for (int i = 0; i < 10; i++) {
+                                for (byte b = '0'; b <= '9'; b++) {
+                                    value[0] = b;
+                                    while (!mService_FFC0.writeRXCharacteristic_withack(value)) {
+                                        try {
+                                            Thread.sleep(20);
+                                        } catch (Exception e) {
+                                            e.getLocalizedMessage();
+                                        }
+                                    }
+                                    // Do some stuff
+                                }
+                            }
+//                        }
+//                    });
+
+
+                    try {
+                        Thread.sleep(100);
+                    } catch (Exception e) {
+                        e.getLocalizedMessage();
                     }
-                });
+                    value[0] = 0x13;
+                    value[19] = 0;
+                    mService_FFC0.writeCommand(value);
+                }else if(txValue[0] == 0x21){
+
+                    value[0] = 0x22;
+                    mService_FFC0.writeCommand(value);
+                }
+//
+//                final byte[] txValue = intent.getByteArrayExtra(HetangsmartFFC0Service.EXTRA_DATA);
+//                runOnUiThread(new Runnable() {
+//                    public void run() {
+//                        try {
+//                            //String text = new String(txValue, "UTF-8");
+//                            BigInteger bi = new BigInteger(txValue);
+//                            String text = bi.toString(16);
+//
+//                            Log.d(TAG,"len:"+txValue.length);
+//                            String currentDateTimeString = DateFormat.getTimeInstance().format(new Date());
+//                            listAdapter.add("["+currentDateTimeString+"] RX: "+text);
+//                            messageListView.smoothScrollToPosition(listAdapter.getCount() - 1);
+//
+//                        } catch (Exception e) {
+//                            Log.e(TAG, e.toString());
+//                        }
+//                    }
+//                });
             }
+
+//            if(action.equals(HetangsmartFFC0Service.CONTROL_POINT_ACK)){
+//
+//            }
             //*********************//
             if (action.equals(HetangsmartFFC0Service.DEVICE_DOES_NOT_SUPPORT_UART)){
                 showMessage("Device doesn't support UART. Disconnecting");

@@ -88,7 +88,7 @@ public class HetangsmartFFC0Service extends Service {
         @Override
         public void onServicesDiscovered(BluetoothGatt gatt, int status) {
             if (status == BluetoothGatt.GATT_SUCCESS) {
-                Log.w(TAG, "mBluetoothGatt = " + mBluetoothGatt );
+                Log.w(TAG, "mBluetoothGatt = " + mBluetoothGatt);
 
                 broadcastUpdate(ACTION_GATT_SERVICES_DISCOVERED);
             } else {
@@ -108,6 +108,7 @@ public class HetangsmartFFC0Service extends Service {
         @Override
         public void onCharacteristicChanged(BluetoothGatt gatt,
                                             BluetoothGattCharacteristic characteristic) {
+            Log.d(TAG, "onCharacteristicChanged");
             //broadcastUpdate(CONTROL_POINT_ACK, characteristic);
             broadcastUpdate(ACTION_DATA_AVAILABLE, characteristic);
 //            if(characteristic.getUuid().toString().equals(TX_CHAR_UUID)) {
@@ -116,6 +117,17 @@ public class HetangsmartFFC0Service extends Service {
 //                broadcastUpdate(CONTROL_POINT_ACK, characteristic);
 //            }
         }
+        @Override
+        public void onReliableWriteCompleted(BluetoothGatt gatt, int status) {
+            Log.d(TAG, "write_complete");
+        }
+
+        @Override
+        public void onDescriptorWrite(BluetoothGatt gatt, BluetoothGattDescriptor descriptor,
+                                      int status) {
+            Log.d(TAG, "onDescriptorWrite");
+        }
+
     };
 
     private void broadcastUpdate(final String action) {
@@ -291,23 +303,24 @@ public class HetangsmartFFC0Service extends Service {
             broadcastUpdate(DEVICE_DOES_NOT_SUPPORT_UART);
             return;
         }
-//        BluetoothGattCharacteristic TxChar = RxService.getCharacteristic(TX_CHAR_UUID);
-//        if (TxChar == null) {
-//            showMessage("Tx charateristic not found!");
-//            broadcastUpdate(DEVICE_DOES_NOT_SUPPORT_UART);
-//            return;
-//        }
-//        mBluetoothGatt.setCharacteristicNotification(TxChar, true);
-//
-//        BluetoothGattDescriptor descriptor = TxChar.getDescriptor(CCCD);
-//        descriptor.setValue(BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE);
-//        mBluetoothGatt.writeDescriptor(descriptor);
-//
-//        try {
-//            Thread.sleep(100);
-//        } catch (Exception e) {
-//            e.getLocalizedMessage();
-//        }
+        BluetoothGattCharacteristic TxChar = RxService.getCharacteristic(TX_CHAR_UUID);
+        if (TxChar == null) {
+            showMessage("Tx charateristic not found!");
+            broadcastUpdate(DEVICE_DOES_NOT_SUPPORT_UART);
+            return;
+        }
+        mBluetoothGatt.setCharacteristicNotification(TxChar, true);
+
+        BluetoothGattDescriptor descriptor = TxChar.getDescriptor(CCCD);
+        descriptor.setValue(BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE);
+        mBluetoothGatt.writeDescriptor(descriptor);
+        Log.d(TAG, "enabled1");
+
+        try {
+            Thread.sleep(100);
+        } catch (Exception e) {
+            e.getLocalizedMessage();
+        }
 
         BluetoothGattCharacteristic CnChar = RxService.getCharacteristic(CN_CHAR_UUID);
         if (CnChar == null) {
@@ -321,7 +334,7 @@ public class HetangsmartFFC0Service extends Service {
         descriptor1.setValue(BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE);
         mBluetoothGatt.writeDescriptor(descriptor1);
 
-        Log.d(TAG, "enabled");
+        Log.d(TAG, "enabled2");
 
     }
 

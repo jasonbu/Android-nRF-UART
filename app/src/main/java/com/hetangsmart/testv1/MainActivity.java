@@ -144,6 +144,7 @@ public class MainActivity extends Activity implements RadioGroup.OnCheckedChange
                 byte[] value = message.getBytes();
 
                 value[0] = 0x41;
+                value[1] = (byte)0xEF;
                 value[19] = 0;
                 mService_FFC0.writeCommand(value);
                 Log.d(TAG, "ready_to_send command ");

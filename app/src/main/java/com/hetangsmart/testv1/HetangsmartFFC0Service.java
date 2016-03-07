@@ -41,8 +41,8 @@ public class HetangsmartFFC0Service extends Service {
             "com.hetangsmart.test.ACTION_GATT_SERVICES_DISCOVERED";
     public final static String ACTION_DATA_AVAILABLE =
             "com.hetangsmart.test.ACTION_DATA_AVAILABLE";
-//    public final static String CONTROL_POINT_ACK =
-//            "com.hetangsmart.test.ACTION_CONTROL_POINT_ACK";
+    public final static String CONTROL_POINT_ACK =
+            "com.hetangsmart.test.ACTION_CONTROL_POINT_ACK";
     public final static String EXTRA_DATA =
             "com.hetangsmart.test.EXTRA_DATA";
     public final static String DEVICE_DOES_NOT_SUPPORT_UART =
@@ -110,12 +110,12 @@ public class HetangsmartFFC0Service extends Service {
                                             BluetoothGattCharacteristic characteristic) {
             Log.d(TAG, "onCharacteristicChanged");
             //broadcastUpdate(CONTROL_POINT_ACK, characteristic);
-            broadcastUpdate(ACTION_DATA_AVAILABLE, characteristic);
-//            if(characteristic.getUuid().toString().equals(TX_CHAR_UUID)) {
-//                broadcastUpdate(ACTION_DATA_AVAILABLE, characteristic);
-//            }else{
-//                broadcastUpdate(CONTROL_POINT_ACK, characteristic);
-//            }
+//            broadcastUpdate(ACTION_DATA_AVAILABLE, characteristic);
+            if(characteristic.getUuid().toString().equals(TX_CHAR_UUID)) {
+                broadcastUpdate(ACTION_DATA_AVAILABLE, characteristic);
+            }else{
+                broadcastUpdate(CONTROL_POINT_ACK, characteristic);
+            }
         }
         @Override
         public void onReliableWriteCompleted(BluetoothGatt gatt, int status) {
@@ -140,7 +140,8 @@ public class HetangsmartFFC0Service extends Service {
         final Intent intent = new Intent(action);
 
         // This is handling for the notification on TX Character of NUS service
-        if (CN_CHAR_UUID.equals(characteristic.getUuid())) {
+        if (CN_CHAR_UUID.equals(characteristic.getUuid())
+                ||(TX_CHAR_UUID.equals((characteristic.getUuid())))) {
 
             // Log.d(TAG, String.format("Received TX: %d",characteristic.getValue() ));
             intent.putExtra(EXTRA_DATA, characteristic.getValue());

@@ -143,9 +143,12 @@ public class MainActivity extends Activity implements RadioGroup.OnCheckedChange
 
                 byte[] value = message.getBytes();
 
-                value[0] = 0x41;
-                value[1] = (byte)0xEE;
-                value[2] = (byte)0x01;
+//                value[0] = 0x41;
+//                value[1] = (byte)0xEE;
+//                value[2] = (byte)0x01;
+                value[0] = 0x00;
+                value[1] = (byte)0xEF;
+                value[2] = 0x01;
                 value[19] = 0;
                 mService_FFC0.writeCommand(value);
                 Log.d(TAG, "ready_to_send command ");
@@ -257,6 +260,12 @@ public class MainActivity extends Activity implements RadioGroup.OnCheckedChange
             //*********************//
             if (action.equals(HetangsmartFFC0Service.ACTION_DATA_AVAILABLE)) {
                 final byte[] txValue = intent.getByteArrayExtra(HetangsmartFFC0Service.EXTRA_DATA);
+                Log.d(TAG,"ACTION_DATA_AVAILABLE" );
+            }
+            //*********************//
+            if (action.equals(HetangsmartFFC0Service.CONTROL_POINT_ACK)) {
+                final byte[] txValue = intent.getByteArrayExtra(HetangsmartFFC0Service.EXTRA_DATA);
+                Log.d(TAG,"CONTROL_POINT_ACK" );
                 Log.d(TAG,"len:"+txValue.length);
                 String currentDateTimeString = DateFormat.getTimeInstance().format(new Date());
                 listAdapter.add("["+currentDateTimeString+"] RX: "+txValue);
@@ -299,6 +308,9 @@ public class MainActivity extends Activity implements RadioGroup.OnCheckedChange
                     value[0] = 0x22;
                     value[1] = (byte)0xD0;
                     value[2] = (byte)0x07;
+                    mService_FFC0.writeCommand(value);
+                }else if(txValue[0] == 0x20){
+                    value[0] = 0x10;
                     mService_FFC0.writeCommand(value);
                 }
 //
@@ -347,6 +359,7 @@ public class MainActivity extends Activity implements RadioGroup.OnCheckedChange
         intentFilter.addAction(HetangsmartFFC0Service.ACTION_GATT_DISCONNECTED);
         intentFilter.addAction(HetangsmartFFC0Service.ACTION_GATT_SERVICES_DISCOVERED);
         intentFilter.addAction(HetangsmartFFC0Service.ACTION_DATA_AVAILABLE);
+        intentFilter.addAction(HetangsmartFFC0Service.CONTROL_POINT_ACK);
         intentFilter.addAction(HetangsmartFFC0Service.DEVICE_DOES_NOT_SUPPORT_UART);
         return intentFilter;
     }

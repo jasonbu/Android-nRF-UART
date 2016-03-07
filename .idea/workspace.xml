@@ -9,9 +9,7 @@
     <option name="TOOL_WINDOW_CONFIGURED_FILTER" value="Show only selected application" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="c1630715-fdf5-469f-90a4-60088e272423" name="Default" comment="文件下载测试通过">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/hetangsmart/testv1/HetangsmartFFC0Service.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/hetangsmart/testv1/HetangsmartFFC0Service.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/hetangsmart/testv1/MainActivity.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/hetangsmart/testv1/MainActivity.java" />
+    <list default="true" id="c1630715-fdf5-469f-90a4-60088e272423" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="Android-nRF-UART.iws" />
@@ -1876,7 +1874,13 @@
       <option name="project" value="LOCAL" />
       <updated>1457258684962</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="main activity 中间没绑定事件、、">
+      <created>1457324499875</created>
+      <option name="number" value="00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1457324499875</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TodoView">
@@ -1942,7 +1946,8 @@
     <MESSAGE value="连接参数商议之后 速度有问题" />
     <MESSAGE value="加log之后 使能多个成功" />
     <MESSAGE value="文件下载测试通过" />
-    <option name="LAST_COMMIT_MESSAGE" value="文件下载测试通过" />
+    <MESSAGE value="main activity 中间没绑定事件、、" />
+    <option name="LAST_COMMIT_MESSAGE" value="main activity 中间没绑定事件、、" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
